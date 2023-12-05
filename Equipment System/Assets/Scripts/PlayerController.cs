@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController cc;
-    public Camera camera;
+    public Transform cam;
 
     public float walkSpeed;
 
@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        cc = GetComponent<CharacterController>();        
+        cc = GetComponent<CharacterController>(); 
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -25,11 +26,11 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
-        Vector3 direction = new Vector3(vertical, 0f, -horizontal).normalized;
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         if(direction.magnitude >= 0.1f)
         {
-            float targerAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + camera.transform.eulerAngles.y;
+            float targerAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targerAngle, ref turnVelocity, turnTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
